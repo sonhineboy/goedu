@@ -51,7 +51,7 @@ func main() {
 	//自定义验证器
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 
-		zhErr := zhtranslations.RegisterDefaultTranslations(v, trans)
+		_ = zhtranslations.RegisterDefaultTranslations(v, trans)
 
 		v.RegisterTagNameFunc(func(fld reflect.StructField) string {
 			name := fld.Tag.Get("label")
@@ -64,21 +64,14 @@ func main() {
 			return name
 		})
 
-		if zhErr != nil {
-			fmt.Println(zhErr)
-		}
 		// 自定义验证方法+自定义验证
-		err := v.RegisterValidation("CustomValidationErrors", CustomValidationErrors)
-		v.RegisterTranslation("CustomValidationErrors", trans, func(ut ut.Translator) error {
+		_ = v.RegisterValidation("CustomValidationErrors", CustomValidationErrors)
+		_ = v.RegisterTranslation("CustomValidationErrors", trans, func(ut ut.Translator) error {
 			return ut.Add("CustomValidationErrors", "{0}不能早于当前时间或{1}格式错误{2}!", true)
 		}, func(ut ut.Translator, fe validator.FieldError) string {
 			t, _ := ut.T("CustomValidationErrors", "asdfasdf", "asdfasdf", "sdafas")
 			return t
 		})
-
-		if err != nil {
-			fmt.Println("error")
-		}
 	}
 
 	r.GET("/", func(context *gin.Context) {

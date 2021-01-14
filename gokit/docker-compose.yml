@@ -1,0 +1,12 @@
+version: "2"
+services:
+  hello:
+    build:
+      context: .
+      dockerfile: hello/Dockerfile
+    restart: always
+    volumes:
+    - .:/go/src/suiyidian.cn/sonhineboy/gokit
+    container_name: hello
+    ports:
+    - 8800:8081
